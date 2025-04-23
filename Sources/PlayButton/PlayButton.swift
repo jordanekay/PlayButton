@@ -1,10 +1,16 @@
 public import SwiftUI
 
 public struct PlayButton {
-    @Binding private var isPlaying: Bool
-    @Environment(\.isEnabled) private var isEnabled
+    private let isEnabled: Bool
 
-    public init(isPlaying: Binding<Bool>) {
+    @Binding private var isPlaying: Bool
+
+    public init(
+        isPlaying: Binding<Bool>,
+        isEnabled: Bool = true
+    ) {
+        self.isEnabled = isEnabled
+
         _isPlaying = isPlaying
     }
 }
@@ -17,6 +23,7 @@ extension PlayButton: View {
             .opacity(isEnabled ? 1 : 0.3)
             .animation(.easeInOut(duration: 0.3), value: isPlaying)
             .onTapGesture(perform: toggle)
+            .disabled(!isEnabled)
             .accessibilityAction(.default, toggle)
             .accessibility(addTraits: .isButton)
     }
