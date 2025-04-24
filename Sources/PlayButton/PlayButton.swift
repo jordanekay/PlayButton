@@ -18,14 +18,20 @@ public struct PlayButton {
 // MARK: -
 extension PlayButton: View {
     public var body: some View {
-        PlayPauseShape(isPlaying: isPlaying)
+        let shape = PlayPauseShape(isPlaying: isPlaying)
             .contentShape(Rectangle())
-            .opacity(isEnabled ? 1 : 0.3)
-            .animation(.easeInOut(duration: 0.3), value: isPlaying)
-            .onTapGesture(perform: toggle)
-            .disabled(!isEnabled)
             .accessibilityAction(.default, toggle)
             .accessibility(addTraits: .isButton)
+
+        if isEnabled {
+            shape
+                .animation(.easeInOut(duration: 0.3), value: isPlaying)
+                .onTapGesture(perform: toggle)
+        } else {
+            shape
+                .opacity(0.3)
+                .disabled(true)
+        }
     }
 }
 
